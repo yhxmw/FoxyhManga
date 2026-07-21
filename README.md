@@ -1,11 +1,11 @@
-# 🌌 MahiruDex - Clean & Fast Manga Reader Client
+# 🌌 FoxyhManga - Clean & Fast Manga Reader Client
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2018.0.0-blue.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![API: MangaDex](https://img.shields.io/badge/API-MangaDex-orange.svg)](https://api.mangadex.org/docs/)
 [![No Ads](https://img.shields.io/badge/Ads-None-green.svg)](#)
 
-**MahiruDex** adalah aplikasi pembaca manga (manga reader) berbasis web yang dirancang secara modern, responsif, dan bebas iklan. Proyek ini berjalan secara *full-stack* (Backend Express.js + Frontend Vanilla JS) dan terintegrasi langsung dengan server resmi **MangaDex**.
+**FoxyhManga** adalah aplikasi pembaca manga (manga reader) berbasis web yang dirancang secara modern, responsif, dan bebas iklan. Proyek ini berjalan secara *full-stack* (Backend Express.js + Frontend Vanilla JS) dan terintegrasi langsung dengan server resmi **MangaDex**.
 
 Aplikasi ini dilengkapi dengan **Image Proxy** dan **Iframe Proxy** mandiri di sisi backend. Hal ini menjamin pembaca dapat menikmati seluruh konten manga dan chapter secara langsung di dalam web kita tanpa terkena kendala CORS atau dialihkan ke situs eksternal (seperti MangaPlus, Shonen Jump, dll.).
 
@@ -29,12 +29,12 @@ Aplikasi ini dilengkapi dengan **Image Proxy** dan **Iframe Proxy** mandiri di s
 ## 📁 Struktur Proyek
 
 ```text
-MahiruDex/
+FoxyhManga/
 ├── public/
 │   ├── index.html              # Dashboard Utama (Popular New, Recommended, Seasonal, dll.)
 │   ├── manga.html              # Halaman Detail Manga & Daftar Chapter & Seri Terkait
 │   ├── reader.html             # Webtoon & Single Page Reader (Custom Popups & Embed Iframe)
-│   ├── docs.html               # Dokumentasi API Internal MahiruDex
+│   ├── docs.html               # Dokumentasi API Internal FoxyhManga
 │   ├── style.css               # Desain UI tema gelap premium
 │   └── placeholder-cover.jpg   # Gambar fallback cover jika bermasalah
 ├── package.json                # Dependensi proyek & konfigurasi ES Modules
@@ -51,7 +51,7 @@ MahiruDex/
 ### Langkah-Langkah
 1. **Clone & Masuk Direktori**:
    ```bash
-   git clone https://github.com/HaidarMahiru/MahiruDex.git && cd MahiruDex
+   git clone https://github.com/HaidarMahiru/FoxyhManga.git && cd FoxyhManga
    ```
 
 2. **Instal Dependensi**:
@@ -74,7 +74,7 @@ MahiruDex/
 
 ## 📡 API Endpoints (Backend)
 
-Backend MahiruDex bertindak sebagai proxy perantara bebas CORS untuk mengonsumsi data dari MangaDex. Berikut adalah beberapa endpoint yang tersedia:
+Backend FoxyhManga bertindak sebagai proxy perantara bebas CORS untuk mengonsumsi data dari MangaDex. Berikut adalah beberapa endpoint yang tersedia:
 
 | Method | Endpoint | Keterangan |
 |--------|----------|------------|
@@ -102,4 +102,4 @@ Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE)
 
 Kontribusi selalu terbuka! Jika Anda menemukan bug atau memiliki ide fitur baru, silakan buka **Issue** Or kirim **Pull Request** langsung di repositori ini.
 
-Dibuat dengan dedikasi penuh oleh [MahiruDex Team](https://github.com/HaidarMahiru). Selamat membaca! 📖✨
+Dibuat dengan dedikasi penuh oleh [FoxyhManga Team](https://github.com/HaidarMahiru). Selamat membaca! 📖✨

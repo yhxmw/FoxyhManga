@@ -1,7 +1,7 @@
 {
   "name": "mahirudex",
   "version": "1.0.0",
-  "description": "Backend and Frontend for MahiruDex",
+  "description": "Backend and Frontend for FoxyhManga",
   "main": "server.js",
   "type": "module",
   "scripts": {

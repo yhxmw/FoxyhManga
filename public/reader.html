@@ -23,12 +23,12 @@
     </script>
 
     <!-- SEO Tags -->
-    <meta name="description" content="Membaca manga online gratis di MahiruDex. Cepat, nyaman, dan bebas iklan.">
+    <meta name="description" content="Membaca manga online gratis di FoxyhManga. Cepat, nyaman, dan bebas iklan.">
     <meta name="keywords" content="MangaDex, api manga, manga, manhwa, manhua, mahirudex baca manga">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membaca Manga - MahiruDex</title>
+    <title>Membaca Manga - FoxyhManga</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -36,7 +36,7 @@
     <!-- Reader Navbar / Header Controls -->
     <header class="reader-header">
         <div class="reader-nav-left">
-            <a href="/" class="reader-logo"><span class="logo-accent">Mahiru</span>Dex</a>
+            <a href="/" class="reader-logo">🦊 FoxyhManga</a>
             <a id="btnBackToManga" href="#" class="reader-nav-btn" title="Kembali ke Detail Manga">
                 <i class="fa-solid fa-chevron-left"></i> <span class="hide-mobile">Detail Manga</span>
             </a>
@@ -317,10 +317,10 @@
                 if (result.success) {
                     const chapter = result.data;
                     pageUrls = chapter.pages;
-                    document.title = `Membaca ${chapter.title || 'Manga'} Ch. ${chapter.chapter} - MahiruDex`;
+                    document.title = `Membaca ${chapter.title || 'Manga'} Ch. ${chapter.chapter} - FoxyhManga`;
                     
                     // Dynamic SEO Update for Reader
-                    document.querySelector('meta[name="description"]').setAttribute('content', `Membaca chapter ${chapter.chapter} dari manga ${chapter.title || ''} online secara gratis, tanpa iklan di MahiruDex.`);
+                    document.querySelector('meta[name="description"]').setAttribute('content', `Membaca chapter ${chapter.chapter} dari manga ${chapter.title || ''} online secara gratis, tanpa iklan di FoxyhManga.`);
                     document.querySelector('meta[name="keywords"]').setAttribute('content', `${chapter.title || 'manga'}, chapter ${chapter.chapter}, baca ${chapter.title || ''} ch ${chapter.chapter}, manga, manhwa, manhua, MangaDex, mahirudex`);
 
                     // Safe verification of MD@Home Pages or External links

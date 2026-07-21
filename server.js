@@ -31,7 +31,7 @@ async function mdFetch(endpoint, params = {}) {
   console.log(`Fetching: ${url.toString()}`);
   const response = await fetch(url.toString(), {
     headers: {
-      'User-Agent': 'MahiruDex/1.0.0 (contact@mahirudex.org)'
+      'User-Agent': 'FoxyhManga/1.0.0 (contact@mahirudex.org)'
     }
   });
 
@@ -391,7 +391,7 @@ app.get('/api/proxy', async (req, res) => {
 
     const imageResponse = await fetch(decodedUrl, {
       headers: {
-        'User-Agent': 'MahiruDex/1.0.0 (contact@mahirudex.org)',
+        'User-Agent': 'FoxyhManga/1.0.0 (contact@mahirudex.org)',
         'Referer': 'https://mangadex.org/'
       }
     });
@@ -467,7 +467,7 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`============================================`);
-  console.log(`MahiruDex backend running at:`);
+  console.log(`FoxyhManga backend running at:`);
   console.log(`http://localhost:${PORT}`);
   console.log(`============================================`);
 });

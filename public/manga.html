@@ -23,18 +23,18 @@
     </script>
 
     <!-- SEO Tags -->
-    <meta name="description" content="Baca manga online gratis di MahiruDex. Cepat, nyaman, dan bebas iklan.">
+    <meta name="description" content="Baca manga online gratis di FoxyhManga. Cepat, nyaman, dan bebas iklan.">
     <meta name="keywords" content="MangaDex, api manga, manga, manhwa, manhua, mahirudex baca manga">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="book">
-    <meta property="og:title" content="Detail Manga - MahiruDex">
-    <meta property="og:description" content="Baca info detail manga online gratis di MahiruDex.">
+    <meta property="og:title" content="Detail Manga - FoxyhManga">
+    <meta property="og:description" content="Baca info detail manga online gratis di FoxyhManga.">
     <meta property="og:image" content="/placeholder-cover.jpg">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Manga - MahiruDex</title>
+    <title>Detail Manga - FoxyhManga</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -48,7 +48,7 @@
     <header class="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
-                <span class="logo-accent">Mahiru</span>Dex
+                <span class="logo-accent">Foxyh</span>Manga
             </a>
             <div class="nav-links">
                 <a href="/"><i class="fa-solid fa-house"></i> Home</a>
@@ -172,7 +172,7 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2025 MahiruDex. Powered by MangaDex API. All rights reserved.</p>
+        <p>&copy; 2025 FoxyhManga. Powered by MangaDex API. All rights reserved.</p>
     </footer>
 
     <script>
@@ -232,7 +232,7 @@
 
                 if (result.success) {
                     const manga = result.data;
-                    document.title = `${manga.title} - MahiruDex`;
+                    document.title = `${manga.title} - FoxyhManga`;
                     breadcrumbTitle.textContent = manga.title;
                     mangaCover.src = manga.coverUrl;
                     mangaCover.alt = manga.title;
@@ -258,10 +258,10 @@
                     ).join('');
 
                     // Dynamic SEO Update based on Manga Details
-                    document.querySelector('meta[name="description"]').setAttribute('content', `Baca manga ${manga.title} online di MahiruDex. ${manga.description.substring(0, 150)}...`);
+                    document.querySelector('meta[name="description"]').setAttribute('content', `Baca manga ${manga.title} online di FoxyhManga. ${manga.description.substring(0, 150)}...`);
                     document.querySelector('meta[name="keywords"]').setAttribute('content', `${manga.title}, manga, manhwa, manhua, MangaDex, api manga, baca ${manga.title}, ${manga.tags.join(', ')}, ${manga.author}`);
-                    document.querySelector('meta[property="og:title"]').setAttribute('content', `${manga.title} - MahiruDex`);
-                    document.querySelector('meta[property="og:description"]').setAttribute('content', `Baca manga ${manga.title} online gratis di MahiruDex. ${manga.description.substring(0, 120)}...`);
+                    document.querySelector('meta[property="og:title"]').setAttribute('content', `${manga.title} - FoxyhManga`);
+                    document.querySelector('meta[property="og:description"]').setAttribute('content', `Baca manga ${manga.title} online gratis di FoxyhManga. ${manga.description.substring(0, 120)}...`);
                     document.querySelector('meta[property="og:image"]').setAttribute('content', manga.coverUrl);
 
                     loading.classList.add('hidden');
