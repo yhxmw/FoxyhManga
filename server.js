@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(express.static(pathModule.join(__dirname, 'public')));
 
 const MANGADEX_API = 'https://api.mangadex.org';
+const COMICK_API = 'https://api.comick.io';
 
 // Helper to fetch from MangaDex
 async function mdFetch(endpoint, params = {}) {
@@ -289,7 +290,7 @@ app.get('/api/manga/:id/feed', async (req, res) => {
   }
 });
 
-// 5. Get Chapter Pages
+// 5. Get Chapter Pages (MangaDex)
 app.get('/api/chapter/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -340,6 +341,41 @@ app.get('/api/chapter/:id', async (req, res) => {
   }
 });
 
+// ========== NEW: COMICK ENDPOINT ==========
+// Get Chapter Pages from Comick (replaces MangaPlus iframe)
+app.get('/api/comick/chapter/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Fetch chapter pages from Comick API
+    const response = await fetch(`${COMICK_API}/v1.0/chapter/${id}/pages`);
+    
+    if (!response.ok) {
+      throw new Error(`Comick API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Format to match MangaDex structure (so frontend works without changes)
+    const pages = data.pages.map((page, index) => ({
+      page: index + 1,
+      url: `/api/proxy?url=${encodeURIComponent(`https://meo.comick.io${page.img_url}`)}`
+    }));
+    
+    res.json({
+      success: true,
+      data: {
+        chapterId: id,
+        pages: pages.map(p => p.url)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching Comick chapter:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+// ========== END COMICK ENDPOINT ==========
+
 // 6. Get Tag List
 app.get('/api/tags', async (req, res) => {
   try {
@@ -381,12 +417,14 @@ app.get('/api/proxy', async (req, res) => {
     const parsedUrl = new URL(decodedUrl);
     const hostname = parsedUrl.hostname;
 
-    const isMangaDexDomain = hostname.endsWith('mangadex.org') || 
-                             hostname.endsWith('mangadex.network') || 
-                             hostname.endsWith('uploads.mangadex.org');
+    const isAllowedDomain = hostname.endsWith('mangadex.org') || 
+                            hostname.endsWith('mangadex.network') || 
+                            hostname.endsWith('uploads.mangadex.org') ||
+                            hostname.endsWith('comick.io') ||
+                            hostname.endsWith('meo.comick.io');
 
-    if (!isMangaDexDomain) {
-      return res.status(400).send('Only MangaDex or MD@Home network URLs can be proxied');
+    if (!isAllowedDomain) {
+      return res.status(400).send('Only MangaDex or Comick URLs can be proxied');
     }
 
     const imageResponse = await fetch(decodedUrl, {
@@ -415,50 +453,13 @@ app.get('/api/proxy', async (req, res) => {
   }
 });
 
-// 9. Iframe Proxy for external manga pages (e.g. MangaPlus)
+// 9. Iframe Proxy for external manga pages (DISABLED - replaced by Comick)
+/*
 app.get('/api/iframe-proxy', async (req, res) => {
-  try {
-    const { url } = req.query;
-    if (!url) {
-      return res.status(400).send('URL is required');
-    }
-
-    const decodedUrl = decodeURIComponent(url);
-    console.log(`Proxying iframe for: ${decodedUrl}`);
-
-    const response = await fetch(decodedUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-      }
-    });
-
-    if (!response.ok) {
-      return res.status(response.status).send(`Failed to load external page: ${response.statusText}`);
-    }
-
-    let html = await response.text();
-
-    const parsedUrl = new URL(decodedUrl);
-    const origin = parsedUrl.origin;
-    const baseHrefTag = `<base href="${origin}/">`;
-    
-    html = html.replace('<head>', `<head>${baseHrefTag}`);
-
-    html = html.replace(/window\.top\./g, 'window.');
-    html = html.replace(/window\.parent\./g, 'window.');
-    html = html.replace(/top\.location/g, 'self.location');
-
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('X-Frame-Options', 'ALLOWALL');
-    res.setHeader('Content-Security-Policy', "frame-ancestors *; default-src * 'unsafe-inline' 'unsafe-eval';");
-
-    res.send(html);
-  } catch (error) {
-    console.error('Iframe proxy error:', error);
-    res.status(500).send('Error proxying external page');
-  }
+  // This endpoint is no longer needed
+  res.status(410).send('Iframe proxy is deprecated. Use Comick instead.');
 });
+*/
 
 // Unmatched route handler (404)
 app.use((req, res) => {
