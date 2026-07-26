@@ -107,11 +107,6 @@
 
         <!-- Page Viewer Canvas -->
         <div class="reader-canvas width-800" id="readerCanvas">
-            <!-- Embedded Iframe Viewer for External/MangaPlus chapters -->
-            <div id="externalViewer" class="viewer-mode hidden" style="width: 100%; height: 90vh;">
-                <iframe id="externalIframe" src="" style="width: 100%; height: 100%; border: none; background: #ffffff; border-radius: 8px;"></iframe>
-            </div>
-
             <!-- Webtoon Mode: Scrolling list of images -->
             <div id="longStripViewer" class="viewer-mode">
                 <!-- Images populated here -->
@@ -308,62 +303,65 @@
             loadChapterPages();
         }
 
+        // ========== MODIFIED: Load from Comick if MangaDex fails ==========
         async function loadChapterPages() {
             showLoading(true);
             try {
+                // First try MangaDex
                 const response = await fetch(`/api/chapter/${chapterId}?quality=${settings.imageQuality}`);
                 const result = await response.json();
 
                 if (result.success) {
                     const chapter = result.data;
-                    pageUrls = chapter.pages;
-                    document.title = `Membaca ${chapter.title || 'Manga'} Ch. ${chapter.chapter} - FoxyhManga`;
                     
-                    // Dynamic SEO Update for Reader
-                    document.querySelector('meta[name="description"]').setAttribute('content', `Membaca chapter ${chapter.chapter} dari manga ${chapter.title || ''} online secara gratis, tanpa iklan di FoxyhManga.`);
-                    document.querySelector('meta[name="keywords"]').setAttribute('content', `${chapter.title || 'manga'}, chapter ${chapter.chapter}, baca ${chapter.title || ''} ch ${chapter.chapter}, manga, manhwa, manhua, MangaDex, mahirudex`);
-
-                    // Safe verification of MD@Home Pages or External links
-                    if (pageUrls.length === 0) {
-                        const fallbackUrl = chapter.externalUrl || `https://mangadex.org/chapter/${chapterId}`;
-                        
-                        try {
-                            const proxyUrl = `/api/iframe-proxy?url=` + encodeURIComponent(fallbackUrl);
-                            const response = await fetch(proxyUrl);
-                            
-                            if (response.ok) {
-                                const htmlText = await response.text();
-                                showLoading(false);
-                                
-                                readerCanvas.classList.remove('hidden');
-                                document.getElementById('externalViewer').classList.remove('hidden');
-                                longStripViewer.classList.add('hidden');
-                                singlePageViewer.classList.add('hidden');
-                                
-                                const iframe = document.getElementById('externalIframe');
-                                iframe.srcdoc = htmlText;
-                            } else {
-                                const errDetail = await response.text();
-                                throw new Error(errDetail || `Status ${response.status}`);
-                            }
-                        } catch (err) {
-                            showLoading(false);
-                            showCustomAlert(`Gagal memuat halaman eksternal resmi (seperti MangaPlus): ${err.message}.`, 'Gagal Memuat');
-                        }
-                    } else {
+                    // If MangaDex has pages, use them
+                    if (chapter.pages && chapter.pages.length > 0) {
+                        pageUrls = chapter.pages;
+                        document.title = `Membaca ${chapter.title || 'Manga'} Ch. ${chapter.chapter} - FoxyhManga`;
                         renderPages();
+                        showLoading(false);
+                        return;
                     }
-                } else {
-                    showError(result.error);
+                    
+                    // If no pages but has externalUrl (MangaPlus), try Comick instead
+                    if (chapter.externalUrl) {
+                        console.log('MangaDex has no pages, trying Comick...');
+                        await loadFromComick(chapterId);
+                        return;
+                    }
+                }
+                
+                // If MangaDex returned no pages, try Comick directly
+                if (pageUrls.length === 0) {
+                    console.log('Trying Comick as fallback...');
+                    await loadFromComick(chapterId);
                 }
             } catch (err) {
-                showError(err.message);
-            } finally {
-                if (pageUrls.length > 0) {
-                    showLoading(false);
-                }
+                console.error('MangaDex error, trying Comick:', err);
+                await loadFromComick(chapterId);
             }
         }
+
+        // ========== NEW: Load from Comick ==========
+        async function loadFromComick(chapterId) {
+            try {
+                const response = await fetch(`/api/comick/chapter/${chapterId}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    pageUrls = result.data.pages;
+                    document.title = `Membaca Manga (Comick) - FoxyhManga`;
+                    renderPages();
+                    showLoading(false);
+                } else {
+                    throw new Error(result.error || 'Gagal memuat dari Comick');
+                }
+            } catch (err) {
+                showLoading(false);
+                showCustomAlert(`Gagal memuat chapter: ${err.message}. Pastikan chapter tersedia di Comick.`, 'Gagal Memuat');
+            }
+        }
+        // ========== END COMICK LOADER ==========
 
         async function loadMangaFeed() {
             try {
@@ -485,4 +483,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
